@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Farmer Assistant - Interactive Prototype</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <!-- CSS File -->
+    <link rel="stylesheet" href="index.css">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Main Smartphone Mockup Frame -->
+        <div class="phone-mockup">
+            <!-- Smartphone Notch & Speaker -->
+            <div class="phone-notch">
+                <div class="camera-lens"></div>
+                <div class="speaker-grill"></div>
+            </div>
+            
+            <!-- Phone Screen Area -->
+            <div class="phone-screen">
+                <!-- Status Bar -->
+                <div class="status-bar">
+                    <div class="status-time" id="current-time">10:42 AM</div>
+                    <div class="status-icons">
+                        <i data-lucide="signal" class="status-icon"></i>
+                        <i data-lucide="wifi" class="status-icon"></i>
+                        <div class="battery-icon">
+                            <span class="battery-level"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top App Bar / Header -->
+                <header class="app-header">
+                    <div class="header-user">
+                        <div class="avatar">RP</div>
+                        <div class="user-info">
+                            <span class="user-greeting" data-key="greeting">Hello, Ramesh Patel</span>
+                            <span class="user-location"><i data-lucide="map-pin"></i> <span data-key="location">Nashik, MH</span></span>
+                        </div>
+                    </div>
+                    <div class="header-actions">
+                        <!-- Language Selector -->
+                        <div class="lang-toggle-container">
+                            <select id="lang-selector" class="lang-selector">
+                                <option value="en">English</option>
+                                <option value="hi">हिन्दी</option>
+                            </select>
+                        </div>
+                        <!-- Voice Mic Button -->
+                        <button class="voice-btn" id="voice-trigger-btn" aria-label="Voice Assistant">
+                            <i data-lucide="mic"></i>
+                            <span class="pulse-ring"></span>
+                        </button>
+                    </div>
+                </header>
+
+                <!-- Screen Contents Container -->
+                <main class="screen-content">
+                    
+                    <!-- SCREEN 1: HOME DASHBOARD -->
+                    <section id="screen-home" class="app-screen active">
+                        <!-- Weather Alert Hero Card -->
+                        <div class="weather-hero-card">
+                            <div class="weather-info">
+                                <div class="weather-temp-location">
+                                    <h2 class="weather-temp">29°C</h2>
+                                    <p class="weather-condition" data-key="weather_cond">Partly Cloudy</p>
+                                </div>
+                                <div class="weather-visual">
+                                    <div class="weather-sun"></div>
+                                    <div class="weather-cloud"></div>
+                                </div>
+                            </div>
+                            <div class="weather-details">
+                                <span><i data-lucide="droplets"></i> 64% <span data-key="humidity">Humidity</span></span>
+                                <span><i data-lucide="wind"></i> 14 km/h <span data-key="wind_speed">Wind</span></span>
+                            </div>
+                            <div class="weather-alert-badge">
+                                <span class="alert-icon">🌧️</span>
+                                <div class="alert-text">
+                                    <strong data-key="alert_title">Heavy Rain Expected</strong>
+                                    <span data-key="alert_desc">Tomorrow afternoon. Delay irrigation schedules.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions Grid -->
+                        <div class="section-container">
+                            <h3 class="section-title" data-key="quick_actions">Quick Actions</h3>
+                            <div class="actions-grid">
+                                <div class="action-card" onclick="navigateTo('scan')">
+                                    <div class="action-icon-wrapper scan-icon">
+                                        <i data-lucide="scan-line"></i>
+                                    </div>
+                                    <h4 data-key="act_scan_title">Detect Disease</h4>
+                                    <p data-key="act_scan_desc">Scan leaf using AI camera</p>
+                                </div>
+                                <div class="action-card" onclick="navigateTo('fertilizers')">
+                                    <div class="action-icon-wrapper fert-icon">
+                                        <i data-lucide="sprout"></i>
+                                    </div>
+                                    <h4 data-key="act_fert_title">Fertilizer Calculator</h4>
+                                    <p data-key="act_fert_desc">Get exact N-P-K ratios</p>
+                                </div>
+                                <div class="action-card" onclick="navigateTo('market')">
+                                    <div class="action-icon-wrapper market-icon">
+                                        <i data-lucide="trending-up"></i>
+                                    </div>
+                                    <h4 data-key="act_mkt_title">Mandi Prices</h4>
+                                    <p data-key="act_mkt_desc">Check crop selling rates</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Info / Tip of the day -->
+                        <div class="tip-card">
+                            <div class="tip-icon"><i data-lucide="lightbulb"></i></div>
+                            <div class="tip-content">
+                                <h4 data-key="tip_title">Smart Tip of the Day</h4>
+                                <p data-key="tip_desc">Spray Neem Oil early morning or late evening to prevent sucking pests without harming beneficial insects.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- SCREEN 2: SCAN (CAMERA) SCREEN -->
+                    <section id="screen-scan" class="app-screen">
+                        <div class="screen-header-simple">
+                            <h2 data-key="scan_header">AI Crop Scanner</h2>
+                            <p data-key="scan_subheader">Point camera at infected plant leaves</p>
+                        </div>
+
+                        <!-- Interactive Camera Viewfinder -->
+                        <div class="camera-viewfinder-wrapper">
+                            <div class="camera-viewfinder" id="camera-viewfinder">
+                                <!-- Grid Lines Overlay -->
+                                <div class="viewfinder-grid"></div>
+                                <div class="viewfinder-corners"></div>
+                                
+                                <!-- Leaf Scan Laser Animation (Only visible during scan state 2) -->
+                                <div class="scanner-laser" id="scanner-laser"></div>
+                                
+                                <!-- Simulated Camera Image Background -->
+                                <img id="camera-feed-img" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23E8F5E9'/><path d='M30,70 Q50,30 70,70' stroke='%232E7D32' stroke-width='2' fill='none'/><path d='M30,70 Q50,50 70,70' stroke='%232E7D32' stroke-width='2' fill='%2381C784'/><path d='M50,30 Q50,70 50,70' stroke='%231B5E20' stroke-width='1'/><circle cx='50' cy='50' r='1' fill='%23C62828'/><circle cx='60' cy='45' r='1.5' fill='%23C62828'/><circle cx='45' cy='55' r='2' fill='%23C62828'/></svg>" alt="Leaf preview" />
+
+                                <!-- Processing Overlay -->
+                                <div class="processing-overlay" id="processing-overlay">
+                                    <div class="spinner"></div>
+                                    <p data-key="analyzing_text">AI is analyzing your crop...</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sample Selector for testing flows -->
+                        <div class="sample-picker-container">
+                            <label data-key="test_sample_label">Select leaf sample to simulate capture:</label>
+                            <div class="sample-buttons">
+                                <button class="sample-btn active" data-sample="blight" onclick="selectSample('blight')">
+                                    <span class="dot blight-dot"></span> <span data-key="sample_blight">Tomato Blight</span>
+                                </button>
+                                <button class="sample-btn" data-sample="rust" onclick="selectSample('rust')">
+                                    <span class="dot rust-dot"></span> <span data-key="sample_rust">Wheat Rust</span>
+                                </button>
+                                <button class="sample-btn" data-sample="healthy" onclick="selectSample('healthy')">
+                                    <span class="dot healthy-dot"></span> <span data-key="sample_healthy">Healthy Rice</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Camera Controls -->
+                        <div class="camera-controls">
+                            <button class="gallery-btn" onclick="triggerGalleryUpload()">
+                                <i data-lucide="image"></i>
+                                <span data-key="gallery_btn">Gallery</span>
+                            </button>
+                            <button class="shutter-btn" id="shutter-btn" onclick="startScanningFlow()">
+                                <div class="shutter-inner"></div>
+                            </button>
+                            <button class="flash-btn" onclick="toggleFlash()">
+                                <i data-lucide="zap" id="flash-icon"></i>
+                                <span data-key="flash_btn">Flash</span>
+                            </button>
+                        </div>
+
+                        <!-- Hidden File input for Gallery upload simulation -->
+                        <input type="file" id="gallery-file-input" style="display: none;" accept="image/*" onchange="handleGalleryFile(event)">
+                    </section>
+
+                    <!-- SCREEN 3: FERTILIZER ENGINE -->
+                    <section id="screen-fertilizers" class="app-screen">
+                        <div class="screen-header-simple">
+                            <h2 data-key="fert_header">Fertilizer Guide</h2>
+                            <p data-key="fert_subheader">Select details to calculate exact soil nutrition needs</p>
+                        </div>
+
+                        <!-- Input Card -->
+                        <div class="input-card">
+                            <div class="form-group">
+                                <label data-key="lbl_select_crop"><i data-lucide="leaf"></i> Select Crop</label>
+                                <div class="custom-select-wrapper">
+                                    <select id="fert-crop" class="form-control" onchange="calculateFertilizer()">
+                                        <option value="wheat" data-key="crop_wheat">🌾 Wheat (गेहूं)</option>
+                                        <option value="rice" data-key="crop_rice">🌾 Rice (धान)</option>
+                                        <option value="cotton" data-key="crop_cotton">☁️ Cotton (कपास)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label data-key="lbl_soil_type"><i data-lucide="layers"></i> Soil Type</label>
+                                <div class="custom-select-wrapper">
+                                    <select id="fert-soil" class="form-control" onchange="calculateFertilizer()">
+                                        <option value="alluvial" data-key="soil_alluvial">Alluvial (जलोढ़ मिट्टी)</option>
+                                        <option value="black" data-key="soil_black">Black (काली मिट्टी)</option>
+                                        <option value="red" data-key="soil_red">Red (लाल मिट्टी)</option>
+                                        <option value="sandy" data-key="soil_sandy">Sandy (बलुआ मिट्टी)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Output Recommendations -->
+                        <div class="fertilizer-output-container" id="fert-output-container">
+                            <div class="output-card">
+                                <div class="card-tag" data-key="rec_label">RECOMMENDED RATIO</div>
+                                
+                                <!-- NPK Visual Rings / Badges -->
+                                <div class="npk-grid">
+                                    <div class="npk-badge n-badge">
+                                        <span class="npk-label">N</span>
+                                        <span class="npk-val" id="npk-n">120</span>
+                                        <span class="npk-unit">kg/ha</span>
+                                        <span class="npk-full" data-key="nitrogen">Nitrogen</span>
+                                    </div>
+                                    <div class="npk-badge p-badge">
+                                        <span class="npk-label">P</span>
+                                        <span class="npk-val" id="npk-p">60</span>
+                                        <span class="npk-unit">kg/ha</span>
+                                        <span class="npk-full" data-key="phosphorus">Phosphorus</span>
+                                    </div>
+                                    <div class="npk-badge k-badge">
+                                        <span class="npk-label">K</span>
+                                        <span class="npk-val" id="npk-k">40</span>
+                                        <span class="npk-unit">kg/ha</span>
+                                        <span class="npk-full" data-key="potassium">Potassium</span>
+                                    </div>
+                                </div>
+
+                                <hr class="card-divider">
+
+                                <!-- Recommendations Details Table -->
+                                <div class="rec-table-wrapper">
+                                    <table class="rec-table">
+                                        <thead>
+                                            <tr>
+                                                <th data-key="tbl_nutrient">Nutrient</th>
+                                                <th data-key="tbl_dosage">Qty (Per Acre)</th>
+                                                <th data-key="tbl_timing">Best Application Time</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Urea (N)</strong></td>
+                                                <td id="urea-dosage">104 kg</td>
+                                                <td id="urea-timing" data-key="urea_time">Split: Sowing & Tillering</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>SSP / DAP (P)</strong></td>
+                                                <td id="p-dosage">130 kg</td>
+                                                <td id="p-timing" data-key="p_time">Basal dose during sowing</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>MOP (K)</strong></td>
+                                                <td id="k-dosage">27 kg</td>
+                                                <td id="k-timing" data-key="k_time">Basal dose or with first watering</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Warnings Box -->
+                                <div class="warning-alert-box">
+                                    <i data-lucide="alert-triangle"></i>
+                                    <div class="warning-alert-text">
+                                        <strong data-key="warn_title">Warning:</strong>
+                                        <span id="fert-warning-text" data-key="wheat_warn">Over-usage of Nitrogen can cause crop lodging and increase pest vulnerability. Do not exceed 120 kg/ha.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- SCREEN 4: MARKET HUSB (MANDI PRICES) -->
+                    <section id="screen-market" class="app-screen">
+                        <div class="market-header">
+                            <div class="market-header-title">
+                                <h2 data-key="market_title">Live Mandi Prices</h2>
+                                <p class="market-gps"><i data-lucide="navigation"></i> <span data-key="showing_gps">Showing prices near your GPS location</span></p>
+                            </div>
+                            
+                            <!-- Location filter dropdown -->
+                            <div class="mandi-filter-container">
+                                <select id="mandi-location" class="mandi-select" onchange="updateMandiPrices()">
+                                    <option value="nashik">Nashik APMC (Maharashtra)</option>
+                                    <option value="nagpur">Nagpur Mandi (Maharashtra)</option>
+                                    <option value="indore">Indore Mandi (Madhya Pradesh)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Live Crop Prices List -->
+                        <div class="crop-price-list" id="crop-price-list">
+                            <!-- JS will dynamically populate listings here, matching the selected Mandi -->
+                        </div>
+                    </section>
+
+                </main>
+
+                <!-- Floating Scan Action Button Area -->
+                <div class="bottom-nav-container">
+                    <nav class="bottom-nav">
+                        <button class="nav-item active" onclick="navigateTo('home')" id="nav-home">
+                            <i data-lucide="home"></i>
+                            <span data-key="nav_home">Home</span>
+                        </button>
+                        <button class="nav-item" onclick="navigateTo('fertilizers')" id="nav-fertilizers">
+                            <i data-lucide="sprout"></i>
+                            <span data-key="nav_fert">Fertilizers</span>
+                        </button>
+                        
+                        <!-- Floating FAB in Center -->
+                        <div class="fab-wrapper">
+                            <button class="scan-fab" onclick="navigateTo('scan')" id="nav-scan" aria-label="Scan Crop">
+                                <i data-lucide="camera"></i>
+                            </button>
+                            <span class="fab-label" data-key="nav_scan">Scan</span>
+                        </div>
+
+                        <button class="nav-item" onclick="navigateTo('market')" id="nav-market">
+                            <i data-lucide="trending-up"></i>
+                            <span data-key="nav_market">Market</span>
+                        </button>
+                        <button class="nav-item" onclick="showHelpModal()" id="nav-help">
+                            <i data-lucide="help-circle"></i>
+                            <span data-key="nav_help">Help</span>
+                        </button>
+                    </nav>
+                </div>
+
+                <!-- NEWS TICKER BAR (Fixed just above the nav bar on Home, or globally) -->
+                <div class="news-ticker-wrapper" id="global-news-ticker">
+                    <div class="ticker-content" id="ticker-items">
+                        <!-- Populated by JS for scrolling marquee -->
+                    </div>
+                </div>
+
+                <!-- OVERLAY 1: SCAN RESULTS MODAL (POPUP) -->
+                <div class="modal-overlay" id="results-modal">
+                    <div class="modal-card">
+                        <div class="modal-close" onclick="closeResultsModal()">&times;</div>
+                        <div class="modal-header-icon" id="results-icon-container">
+                            <i data-lucide="alert-circle" class="warning-icon"></i>
+                        </div>
+                        <h3 class="modal-title" id="results-title">Disease Detected!</h3>
+                        <div class="results-confidence">
+                            <span data-key="confidence_lbl">Confidence:</span> <strong id="results-conf-value">94%</strong>
+                        </div>
+                        
+                        <div class="results-body">
+                            <h4 data-key="treatment_title">Recommended Treatment:</h4>
+                            <ul class="treatment-steps" id="results-treatment">
+                                <!-- Steps populated by JS -->
+                            </ul>
+                        </div>
+
+                        <button class="buy-btn" id="buy-pesticide-btn" onclick="buyPesticide()">
+                            <i data-lucide="shopping-cart"></i>
+                            <span id="buy-btn-text">Buy Recommended Pesticide</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- OVERLAY 2: VOICE ASSISTANT MODAL -->
+                <div class="modal-overlay" id="voice-modal">
+                    <div class="voice-modal-card">
+                        <div class="modal-close" onclick="closeVoiceModal()">&times;</div>
+                        <h3 data-key="voice_title" class="voice-assistant-title">AI Voice Assistant</h3>
+                        
+                        <!-- Animated Waves -->
+                        <div class="wave-container" id="wave-container">
+                            <div class="wave bar-1"></div>
+                            <div class="wave bar-2"></div>
+                            <div class="wave bar-3"></div>
+                            <div class="wave bar-4"></div>
+                            <div class="wave bar-5"></div>
+                            <div class="wave bar-6"></div>
+                            <div class="wave bar-7"></div>
+                            <div class="wave bar-8"></div>
+                        </div>
+
+                        <div class="voice-status" id="voice-status" data-key="voice_listening">Listening... Ask me anything in English or Hindi</div>
+                        
+                        <!-- Simulated Transcripts -->
+                        <div class="voice-dialogue">
+                            <p class="user-speech-bubble" id="user-speech" style="display: none;"></p>
+                            <p class="ai-speech-bubble" id="ai-speech" style="display: none;"></p>
+                        </div>
+
+                        <!-- Sample spoken commands for clicking -->
+                        <div class="voice-suggestions">
+                            <p class="suggestion-title" data-key="suggested_questions">Try clicking a sample question:</p>
+                            <div class="suggestion-buttons">
+                                <button class="suggest-btn" onclick="simulateVoiceQuery('weather')">
+                                    💬 <span data-key="q_weather">"Will it rain today?"</span>
+                                </button>
+                                <button class="suggest-btn" onclick="simulateVoiceQuery('fertilizer')">
+                                    💬 <span data-key="q_fertilizer">"How much SSP for wheat in alluvial soil?"</span>
+                                </button>
+                                <button class="suggest-btn" onclick="simulateVoiceQuery('disease')">
+                                    💬 <span data-key="q_disease">"How to treat Leaf Blight?"</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- OVERLAY 3: HELP MODAL -->
+                <div class="modal-overlay" id="help-modal">
+                    <div class="modal-card">
+                        <div class="modal-close" onclick="closeHelpModal()">&times;</div>
+                        <div class="modal-header-icon">
+                            <i data-lucide="help-circle" style="color: var(--primary);"></i>
+                        </div>
+                        <h3 class="modal-title" data-key="help_title">Welcome to Smart Farmer!</h3>
+                        <div class="help-body">
+                            <p data-key="help_desc1">This app is designed to help farmers use artificial intelligence for better crop management.</p>
+                            <ul class="help-list">
+                                <li><strong><span data-key="nav_home">Home</span>:</strong> <span data-key="help_home_desc">Get immediate weather notifications and access actions quickly.</span></li>
+                                <li><strong><span data-key="nav_scan">Scan</span>:</strong> <span data-key="help_scan_desc">Use AI to scan plant leaves and diagnose crop disease details instantly.</span></li>
+                                <li><strong><span data-key="nav_fert">Fertilizers</span>:</strong> <span data-key="help_fert_desc">Input your soil type and target crop to retrieve the exact scientific N-P-K recommendation.</span></li>
+                                <li><strong><span data-key="nav_market">Market</span>:</strong> <span data-key="help_market_desc">Monitor daily crop prices from local wholesale markets (mandis).</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Toast Notifications -->
+                <div class="toast" id="app-toast">
+                    <div class="toast-content">
+                        <i data-lucide="check-circle" class="toast-icon" id="toast-icon-type"></i>
+                        <span class="toast-message" id="toast-message-text">Notification message</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Logic File -->
+    <script src="app.js"></script>
+</body>
+</html>
